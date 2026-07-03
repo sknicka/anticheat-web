@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WX AntiCheat - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>WX AntiCheat</h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="players">
+                    <i class="fas fa-users"></i>
+                    <span>Players</span>
+                </a>
+                <a href="#" class="nav-item" data-page="bans">
+                    <i class="fas fa-ban"></i>
+                    <span>Bans</span>
+                </a>
+                <a href="#" class="nav-item" data-page="logs">
+                    <i class="fas fa-list"></i>
+                    <span>Logs</span>
+                </a>
+            </nav>
+
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <p class="user-name" id="userName">Loading...</p>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="header-info">
+                    <span id="serverStatus" class="status online">● Online</span>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon players">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Online Players</h3>
+                                <p class="stat-number" id="playerCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon admins">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Admins</h3>
+                                <p class="stat-number" id="adminCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bans">
+                                <i class="fas fa-gavel"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Total Bans</h3>
+                                <p class="stat-number" id="banCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon uptime">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Server Status</h3>
+                                <p class="stat-number">Operational</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Recent Bans</h3>
+                            <div class="recent-bans" id="recentBans">
+                                <p class="empty-state">No recent bans</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Quick Actions</h3>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary" id="refreshBtn">
+                                    <i class="fas fa-sync"></i> Refresh Data
+                                </button>
+                                <button class="btn btn-secondary" id="settingsBtn">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Players Page -->
+                <div id="players" class="page">
+                    <div class="card">
+                        <h3>Online Players</h3>
+                        <div class="players-list" id="playersList">
+                            <p class="empty-state">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bans Page -->
+                <div id="bans" class="page">
+                    <div class="card">
+                        <h3>Ban List</h3>
+                        <div class="bans-list" id="bansList">
+                            <p class="empty-state">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Page -->
+                <div id="logs" class="page">
+                    <div class="card">
+                        <h3>Admin Logs</h3>
+                        <div class="logs-list" id="logsList">
+                            <p class="empty-state">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>WX AntiCheat Admin Panel</h2>
+            </div>
+            <div class="modal-body">
+                <p>Please authenticate with your Steam ID</p>
+                <input type="text" id="steamIdInput" placeholder="Enter your Steam ID (e.g., steam:11000123456789)">
+                <div class="error-message" id="loginError"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="loginBtn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban Modal -->
+    <div id="banModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ban Player</h2>
+                <button class="close-btn" id="closeBanModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="banPlayerId" placeholder="Player ID">
+                <input type="text" id="banReason" placeholder="Ban Reason">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBanBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmBanBtn">Ban Player</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unban Modal -->
+    <div id="unbanModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Unban Player</h2>
+                <button class="close-btn" id="closeUnbanModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="unbanConfirmText"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelUnbanBtn">Cancel</button>
+                <button class="btn btn-success" id="confirmUnbanBtn">Confirm Unban</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
